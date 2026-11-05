@@ -33,7 +33,7 @@ Maven 时自动选用命中的配置。
 
 ### 方式一：直接用打包好的 zip
 
-`dist/directory-maven-settings-1.1.2.zip` →
+`dist/directory-maven-settings-1.1.3.zip` →
 
 `Settings → Plugins → ⚙️ → Install Plugin from Disk…` → 选择该 zip → 重启 IDE。
 
@@ -47,7 +47,7 @@ cd dir-maven-settings
 
 # 默认下载并使用 2025.2.5 作为编译平台
 ./gradlew buildPlugin
-# 产物：dist/directory-maven-settings-1.1.2.zip
+# 产物：dist/directory-maven-settings-1.1.3.zip
 
 # 直接起一个带插件的沙箱 IDE 调试
 ./gradlew runIde
@@ -182,8 +182,8 @@ profile 清洗、带引号参数分词、停用规则、Windows 盘符大小写�
 
 ## 兼容性
 
-- `plugin.xml` 声明 `since-build="252"`、`until-build="263.*"`，目标范围为 IntelliJ IDEA 2025.2 至 2026.3。当前本机 IDEA
-  2026.3 已通过 `buildPlugin`；其他目标版本仍需分别运行验证。
+- `plugin.xml` 声明 `since-build="251"`、`until-build="263.*"`，目标范围为 IntelliJ IDEA 2025.1 至 2026.3。
+  JetBrains Marketplace 的兼容性检查显示 2025.1 至 2026.3 RC 兼容；2024.3 系列存在兼容性问题。
 - 若要核验较早版本，请用对应版本的 SDK 编译——
   这条链路上的 API 在 2024–2026 之间做过 Kotlin 化调整（例如 `TextFieldWithBrowseButton` 迁到了
   `com.intellij.openapi.ui`，`RunConfigurationExtensionBase` 迁到了 `com.intellij.execution.configuration`）。
