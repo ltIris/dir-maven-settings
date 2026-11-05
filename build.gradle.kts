@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "dev.dirmaven"
-version = "1.1.0"
+version = "1.1.1"
 
 val ideaHome = providers.gradleProperty("ideaHome").orElse(providers.environmentVariable("IDEA_HOME")).orNull
 
@@ -43,7 +43,7 @@ configurations.named("compileClasspath") {
 }
 
 tasks {
-    // 构建插件分发包：dist/directory-maven-settings-1.1.0.zip
+    // 构建插件分发包：dist/directory-maven-settings-1.1.1.zip
     buildPlugin {
         archiveBaseName.set("directory-maven-settings")
         archiveVersion.set(project.version.toString())

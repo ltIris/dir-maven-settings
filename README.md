@@ -31,7 +31,7 @@
 
 ### 方式一：直接用打包好的 zip
 
-`dist/directory-maven-settings-1.1.0.zip` →
+`dist/directory-maven-settings-1.1.1.zip` →
 
 `Settings → Plugins → ⚙️ → Install Plugin from Disk…` → 选择该 zip → 重启 IDE。
 
@@ -44,7 +44,7 @@ cd dir-maven-settings
 
 # 默认下载并使用 2025.2.5 作为编译平台
 ./gradlew buildPlugin
-# 产物：dist/directory-maven-settings-1.1.0.zip
+# 产物：dist/directory-maven-settings-1.1.1.zip
 
 # 直接起一个带插件的沙箱 IDE 调试
 ./gradlew runIde
