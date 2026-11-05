@@ -1,0 +1,110 @@
+<idea-plugin>
+    <id>dev.dirmaven.settings</id>
+    <name>Directory Maven Settings</name>
+    <vendor>dev.dirmaven</vendor>
+    <version>1.1.0</version>
+
+    <description><![CDATA[
+    <p>让 Maven 的 settings.xml 跟着<b>目录</b>走：为不同模块 / 不同目录配置各自的 settings.xml、profile、额外参数和环境变量，
+    运行 Maven 时自动注入 <code>-s</code> / <code>-P</code>，不必在全局设置里来回切换。</p>
+    <ul>
+      <li>规则按目录前缀匹配，支持相对路径、<code>${PROJECT_DIR$}</code>、<code>~</code> 与 <code>*</code> / <code>?</code> / <code>**</code> 通配符，最长前缀优先。</li>
+      <li>一条规则可填多个目录；规则可标记「全局」，一次配置对本机所有项目生效。</li>
+      <li><b>默认兜底规则</b>：所有目录都没命中时，用标了「默认兜底」的规则，可留空目录。</li>
+      <li>项目打开 / Maven 导入完成后自动切换 User settings file，git clone 新项目免手动操作。</li>
+      <li>状态栏实时显示当前文件目录命中的规则；设置页内置「目录匹配测试」，可预览最终 mvn 参数。</li>
+      <li>规则保存在 <code>.idea/directoryMavenSettings.xml</code> 或 IDE 全局配置，可单文件共享。</li>
+    </ul>
+    ]]></description>
+
+    <change-notes><![CDATA[
+    <h3>1.1.0</h3>
+    <ul>
+      <li>新增「默认兜底」规则：目录全都没命中时自动生效，可留空目录；项目级兜底优先于全局兜底</li>
+      <li>去掉项目级总开关，避免它连带屏蔽全局规则导致「规则看起来对却不生效」</li>
+      <li>规则卡片折叠后不再出现大块空白；折叠摘要过长时自动省略（最多显示 2 个目录 + 共 N 个）</li>
+      <li>补充完整插件描述与版本历史，为发布 Marketplace 做准备</li>
+    </ul>
+    <h3>1.0.8</h3>
+    <ul>
+      <li>Maven 导入完成后自动按目录切换 settings.xml 并重新导入，git clone 新项目免手动操作</li>
+      <li>规则卡片支持折叠，规则多时设置页更清爽</li>
+    </ul>
+    <h3>1.0.7</h3>
+    <ul>
+      <li>通配符陷阱提示：目录测试未命中时，若把 <code>*</code> 换成 <code>**</code> 就能命中，会在结果里直接给出修正建议</li>
+    </ul>
+    <h3>1.0.6</h3>
+    <ul>
+      <li>设置页简化为单列表，去掉多余标签页；「全局」改为每条规则上的勾选框</li>
+      <li>全局规则存 IDE 全局配置，一次配置本机所有项目生效</li>
+    </ul>
+    <h3>1.0.5</h3>
+    <ul>
+      <li>新增全局规则：所有项目共享一组规则，与项目规则同精度时项目优先</li>
+    </ul>
+    <h3>1.0.4</h3>
+    <ul>
+      <li>目录改为每行一个，支持浏览选择；「目录匹配测试」弹窗重做，展示最终注入的完整 mvn 参数与环境变量</li>
+    </ul>
+    <h3>1.0.3</h3>
+    <ul>
+      <li>规则支持环境变量配置</li>
+      <li>新增「目录匹配测试」按钮，输入目录即时验证命中结果</li>
+      <li>更换为 Maven 风格图标</li>
+    </ul>
+    <h3>1.0.2</h3>
+    <ul>
+      <li>一条规则支持多个目录，任一命中即生效</li>
+    </ul>
+    <h3>1.0.1</h3>
+    <ul>
+      <li>规则支持自定义名称；停用的规则置灰显示</li>
+      <li>更换插件图标</li>
+    </ul>
+    <h3>1.0.0</h3>
+    <ul>
+      <li>首个版本：按目录匹配 settings.xml，运行 Maven 时自动注入 <code>-s</code> / <code>-P</code> / 额外参数</li>
+      <li>支持相对路径、<code>${PROJECT_DIR$}</code>、<code>~</code> 与通配符，最长前缀优先</li>
+      <li>状态栏实时显示命中规则；Tools 菜单一键应用为项目全局配置并重新导入</li>
+    </ul>
+    ]]></change-notes>
+
+    <idea-version since-build="252" until-build="263.*"/>
+
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.java</depends>
+    <depends>org.jetbrains.idea.maven</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <projectService serviceImplementation="dev.dirmaven.DirectoryMavenSettings"/>
+        <applicationService serviceImplementation="dev.dirmaven.DirectoryMavenGlobalSettings"/>
+
+        <projectConfigurable id="dev.dirmaven.configurable"
+                             instance="dev.dirmaven.ui.DirMavenConfigurable"
+                             parentId="MavenSettings"
+                             displayName="Directory Settings"/>
+
+        <runConfigurationExtension implementation="dev.dirmaven.run.DirMavenRunConfigurationExtension"/>
+
+        <statusBarWidgetFactory id="DirectoryMavenSettings"
+                                implementation="dev.dirmaven.ui.DirMavenStatusBarWidgetFactory"/>
+
+        <notificationGroup id="dirmaven.notifications" displayType="BALLOON"/>
+    </extensions>
+
+    <projectListeners>
+        <!-- Maven 导入完成后按目录规则自动切换 settings.xml 并重新导入 -->
+        <listener class="dev.dirmaven.run.AutoMavenSettingsApplier"
+                  topic="org.jetbrains.idea.maven.project.MavenImportListener"/>
+    </projectListeners>
+
+    <actions>
+        <action id="dev.dirmaven.ApplyDirectoryMavenSettings"
+                class="dev.dirmaven.actions.ApplyDirectoryMavenSettingsAction"
+                text="Apply Directory Maven Settings and Reload"
+                description="把当前文件所在目录命中的 settings.xml 设为项目全局 Maven 配置，并重新导入">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
+    </actions>
+</idea-plugin>
