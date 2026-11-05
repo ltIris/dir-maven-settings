@@ -26,7 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Author lt_xiaoyi
  * @Description 向 Maven 运行配置注入匹配的参数与环境变量
  * @Version 1.0
- *
+ * <p>
  * 关键实现：在 Maven 运行配置真正启动进程之前，把当前工作目录命中的
  * {@code -s <settings.xml>} / {@code -P <profiles>} / 额外参数追加到 mvn 命令行里。
  *
@@ -42,11 +42,14 @@ public final class DirMavenRunConfigurationExtension extends RunConfigurationExt
     private static final Logger LOG = Logger.getInstance(DirMavenRunConfigurationExtension.class);
     private static final String NOTIFICATION_GROUP = "dirmaven.notifications";
 
-    /** 同一个缺失文件只提醒一次，避免每次运行都弹气泡。 */
+    /**
+     * 同一个缺失文件只提醒一次，避免每次运行都弹气泡。
+     */
     private static final Set<String> REPORTED_MISSING = ConcurrentHashMap.newKeySet();
 
     /**
      * 判断当前运行配置是否支持注入 Maven 参数。
+     *
      * @param configuration 当前运行配置
      * @return 支持注入时为 true
      */
@@ -57,14 +60,15 @@ public final class DirMavenRunConfigurationExtension extends RunConfigurationExt
 
     /**
      * 将命中规则的参数与环境变量加入 Maven 运行配置。
-     * @param configuration 当前运行配置
-     * @param params 待追加 Maven 参数与环境变量的 Java 运行参数
+     *
+     * @param configuration  当前运行配置
+     * @param params         待追加 Maven 参数与环境变量的 Java 运行参数
      * @param runnerSettings 当前运行器设置
      */
     @Override
     public <T extends RunConfigurationBase<?>> void updateJavaParameters(@NotNull T configuration,
-                                                                        @NotNull JavaParameters params,
-                                                                        @Nullable RunnerSettings runnerSettings) {
+                                                                         @NotNull JavaParameters params,
+                                                                         @Nullable RunnerSettings runnerSettings) {
         if (!(configuration instanceof MavenRunConfiguration mavenConfiguration)) {
             return;
         }
@@ -108,8 +112,9 @@ public final class DirMavenRunConfigurationExtension extends RunConfigurationExt
 
     /**
      * 按运行配置的项目和工作目录解析规则。
-     * @param settings 项目规则配置服务
-     * @param project 当前 IDE 项目
+     *
+     * @param settings   项目规则配置服务
+     * @param project    当前 IDE 项目
      * @param parameters 当前 Maven 运行参数
      * @return 当前工作目录命中的配置；未命中时为 null
      */
@@ -137,6 +142,7 @@ public final class DirMavenRunConfigurationExtension extends RunConfigurationExt
 
     /**
      * 检查命令行是否已显式指定 settings 文件。
+     *
      * @param goals Maven 命令行目标及选项
      * @return 已指定 settings 文件时为 true
      */
@@ -160,8 +166,9 @@ public final class DirMavenRunConfigurationExtension extends RunConfigurationExt
 
     /**
      * 检查参数列表是否已经包含全部待注入参数。
+     *
      * @param parameters 当前 Maven 参数列表
-     * @param arguments 待检测或追加的参数
+     * @param arguments  待检测或追加的参数
      * @return 所有参数均已存在时为 true
      */
     private static boolean containsAll(ParametersList parameters, List<String> arguments) {
@@ -175,7 +182,8 @@ public final class DirMavenRunConfigurationExtension extends RunConfigurationExt
 
     /**
      * 在 settings 文件不存在时向用户发出一次提醒。
-     * @param project 当前 IDE 项目
+     *
+     * @param project  当前 IDE 项目
      * @param resolved 已解析的 Maven 配置
      */
     private static void warnIfSettingsMissing(Project project, ResolvedMavenConfig resolved) {

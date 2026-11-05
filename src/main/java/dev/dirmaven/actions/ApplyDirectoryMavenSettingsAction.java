@@ -17,7 +17,7 @@ import org.jetbrains.idea.maven.project.MavenProjectsManager;
  * @Author lt_xiaoyi
  * @Description 手动应用当前目录的 Maven 配置
  * @Version 1.0
- *
+ * <p>
  * 「应用当前目录的 Maven Settings 并重新导入」。
  *
  * <p>插件运行时注入只影响 mvn 命令行；而 IDEA 的 <b>依赖解析/项目导入</b> 走的是项目级全局
@@ -30,6 +30,7 @@ public final class ApplyDirectoryMavenSettingsAction extends AnAction {
 
     /**
      * 手动应用当前目录命中的 Maven 设置。
+     *
      * @param event IDE 动作或编辑器事件
      */
     @Override
@@ -54,7 +55,8 @@ public final class ApplyDirectoryMavenSettingsAction extends AnAction {
         }
 
         manager.getGeneralSettings().setUserSettingsFile(resolved.getSettingsPath());
-        manager.forceUpdateProjects();
+        // 菜单仅对 Maven 项目可用；通过公开入口重新导入，使新的 settings.xml 参与依赖解析。
+        manager.forceUpdateAllProjectsOrFindAllAvailablePomFiles();
         notify(project, "已切换到 " + resolved.getSettingsPath(),
                 "已按目录规则切换 Maven settings.xml，并触发重新导入。注意这是项目级全局设置，切换后其它模块也会使用它。",
                 NotificationType.INFORMATION);
@@ -62,6 +64,7 @@ public final class ApplyDirectoryMavenSettingsAction extends AnAction {
 
     /**
      * 更新菜单动作的可用状态。
+     *
      * @param event IDE 动作或编辑器事件
      */
     @Override
@@ -73,6 +76,7 @@ public final class ApplyDirectoryMavenSettingsAction extends AnAction {
 
     /**
      * 指定动作状态更新所用线程。
+     *
      * @return 后台线程标识
      */
     @Override
@@ -82,7 +86,8 @@ public final class ApplyDirectoryMavenSettingsAction extends AnAction {
 
     /**
      * 获取当前文件或项目对应的目录。
-     * @param event IDE 动作或编辑器事件
+     *
+     * @param event   IDE 动作或编辑器事件
      * @param project 当前 IDE 项目
      * @return 当前文件所在目录；不可用时为项目根目录
      */
@@ -100,10 +105,11 @@ public final class ApplyDirectoryMavenSettingsAction extends AnAction {
 
     /**
      * 显示操作结果通知。
+     *
      * @param project 当前 IDE 项目
-     * @param title 通知标题
+     * @param title   通知标题
      * @param content 通知正文
-     * @param type 通知级别
+     * @param type    通知级别
      */
     private static void notify(Project project, String title, String content, NotificationType type) {
         NotificationGroupManager.getInstance()

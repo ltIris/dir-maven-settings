@@ -44,7 +44,7 @@ import java.util.List;
  * @Author lt_xiaoyi
  * @Description 提供目录规则的设置页面与匹配预览
  * @Version 1.0
- *
+ * <p>
  * Settings → Build, Execution, Deployment → Build Tools → Maven → Directory Settings 页面。
  *
  * <p>一个规则列表：每条规则带「全局」勾选 —— 勾选后存在 IDE 全局配置（本机所有项目生效），
@@ -62,15 +62,20 @@ public final class DirMavenConfigurable implements Configurable {
     private JBTextField testField;
     private JBLabel testResult;
 
-    /** 编辑器里的完整快照（含 global 标记），用于 isModified 比较。 */
+    /**
+     * 编辑器里的完整快照（含 global 标记），用于 isModified 比较。
+     */
     private List<MavenRule> snapshot = new ArrayList<>();
     private boolean snapshotAutoApply = true;
 
-    /** 折叠状态按规则内容记忆，rebuild 后不丢。 */
+    /**
+     * 折叠状态按规则内容记忆，rebuild 后不丢。
+     */
     private final java.util.Set<String> collapsedKeys = new java.util.HashSet<>();
 
     /**
      * 初始化 DirMavenConfigurable。
+     *
      * @param project 当前 IDE 项目
      */
     public DirMavenConfigurable(Project project) {
@@ -79,6 +84,7 @@ public final class DirMavenConfigurable implements Configurable {
 
     /**
      * 返回设置页面的显示名称。
+     *
      * @return 设置页面名称
      */
     @Override
@@ -88,6 +94,7 @@ public final class DirMavenConfigurable implements Configurable {
 
     /**
      * 创建并返回设置页面组件。
+     *
      * @return 设置页面组件
      */
     @Override
@@ -101,6 +108,7 @@ public final class DirMavenConfigurable implements Configurable {
 
     /**
      * 构建设置页面的交互控件。
+     *
      * @return 完整设置页面
      */
     private JPanel buildPanel() {
@@ -176,6 +184,7 @@ public final class DirMavenConfigurable implements Configurable {
 
     /**
      * 比较当前编辑状态与已保存配置。
+     *
      * @return 编辑值与已保存配置不同时为 true
      */
     @Override
@@ -189,6 +198,7 @@ public final class DirMavenConfigurable implements Configurable {
 
     /**
      * 校验并保存用户编辑的规则。
+     *
      * @throws ConfigurationException 配置或输入无效时抛出
      */
     @Override
@@ -223,6 +233,7 @@ public final class DirMavenConfigurable implements Configurable {
 
     /**
      * 校验规则中的目录和兜底配置。
+     *
      * @param rules 待保存或解析的规则列表
      * @throws ConfigurationException 配置或输入无效时抛出
      */
@@ -324,6 +335,7 @@ public final class DirMavenConfigurable implements Configurable {
 
     /**
      * 收集各编辑卡片的规则值。
+     *
      * @return 当前编辑卡片中的规则列表
      */
     private List<MavenRule> collectRules() {
@@ -336,6 +348,7 @@ public final class DirMavenConfigurable implements Configurable {
 
     /**
      * 按当前 UI 的规则做两层解析（global 勾选的进全局层，其余进项目层）。
+     *
      * @param directory 待匹配的目标目录
      * @return 合并后的匹配结果；未命中时为 null
      */
@@ -418,10 +431,11 @@ public final class DirMavenConfigurable implements Configurable {
 
     /**
      * 测试结果对话框内容：分组排版，命令行可一键复制。{@code suggestion} 仅在未命中时给出修改建议。
-     * @param directory 待匹配的目标目录
-     * @param resolved 已解析的 Maven 配置
+     *
+     * @param directory       待匹配的目标目录
+     * @param resolved        已解析的 Maven 配置
      * @param missingSettings settings.xml 文件是否缺失
-     * @param suggestion 规则未命中时的修改建议
+     * @param suggestion      规则未命中时的修改建议
      * @return 用于展示解析结果的面板
      */
     private JPanel buildTestResultPanel(String directory, @Nullable ResolvedMavenConfig resolved,
@@ -488,6 +502,7 @@ public final class DirMavenConfigurable implements Configurable {
 
     /**
      * 格式化环境变量的展示文本。
+     *
      * @param envVars 环境变量配置
      * @return 经过格式化的环境变量文本
      */
@@ -507,6 +522,7 @@ public final class DirMavenConfigurable implements Configurable {
 
     /**
      * 转义展示文本中的 HTML 特殊字符。
+     *
      * @param text 待解析或展示的文本
      * @return 可安全展示的 HTML 文本
      */
@@ -514,17 +530,20 @@ public final class DirMavenConfigurable implements Configurable {
         return text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
     }
 
-    /** 轻量结果对话框：只有 OK，带图标、自适应内容高度。 */
+    /**
+     * 轻量结果对话框：只有 OK，带图标、自适应内容高度。
+     */
     private static final class TestResultDialog extends DialogWrapper {
         private final JComponent panel;
         private final javax.swing.Icon icon;
 
         /**
          * 创建只展示解析结果的非模态对话框。
+         *
          * @param project 当前 IDE 项目
-         * @param title 对话框标题
-         * @param panel 解析结果面板
-         * @param icon 结果图标
+         * @param title   对话框标题
+         * @param panel   解析结果面板
+         * @param icon    结果图标
          */
         TestResultDialog(Project project, String title, JComponent panel, javax.swing.Icon icon) {
             super(project, false);
@@ -537,6 +556,7 @@ public final class DirMavenConfigurable implements Configurable {
 
         /**
          * 提供对话框中心内容。
+         *
          * @return 对话框中心面板
          */
         @Override
@@ -549,6 +569,7 @@ public final class DirMavenConfigurable implements Configurable {
 
         /**
          * 提供结果对话框的操作按钮。
+         *
          * @return 对话框操作按钮
          */
         @Override
@@ -559,6 +580,7 @@ public final class DirMavenConfigurable implements Configurable {
 
     /**
      * 复制规则列表以保存编辑快照。
+     *
      * @param rules 待保存或解析的规则列表
      * @return 与原列表独立的规则副本
      */
@@ -570,10 +592,14 @@ public final class DirMavenConfigurable implements Configurable {
         return copy;
     }
 
-    /** 单条规则的编辑卡片。 */
+    /**
+     * 单条规则的编辑卡片。
+     */
     private final class RuleEditor {
 
-        /** 最大高度锁定为内容实际高度：避免 BoxLayout 在空间富余时把卡片垂直拉伸出一大块空白。 */
+        /**
+         * 最大高度锁定为内容实际高度：避免 BoxLayout 在空间富余时把卡片垂直拉伸出一大块空白。
+         */
         private final JPanel panel = new JPanel(new BorderLayout(0, JBUI.scale(6))) {
             /**
              * 限制编辑卡片的最大高度。
@@ -597,7 +623,9 @@ public final class DirMavenConfigurable implements Configurable {
         private final JBTextField extraArgs = new JBTextField();
         private final JBTextField envVars = new JBTextField();
 
-        /** 折叠状态：折叠后只显示标题行 + 摘要。 */
+        /**
+         * 折叠状态：折叠后只显示标题行 + 摘要。
+         */
         private boolean expanded = true;
         private final JButton collapseToggle = new JButton();
         private final JBLabel summaryLabel = new JBLabel();
@@ -605,6 +633,7 @@ public final class DirMavenConfigurable implements Configurable {
 
         /**
          * 根据已有规则填充编辑卡片，保留用户可见的配置值。
+         *
          * @param rule 待编辑的规则
          */
         RuleEditor(MavenRule rule) {
@@ -733,6 +762,7 @@ public final class DirMavenConfigurable implements Configurable {
 
         /**
          * 折叠键：按名称 + 目录内容记忆折叠状态，重新打开设置页也能恢复。
+         *
          * @return 规则折叠状态的键
          */
         private String collapseKey() {
@@ -777,7 +807,8 @@ public final class DirMavenConfigurable implements Configurable {
 
         /**
          * 切换卡片展开状态并按需保存。
-         * @param value 待处理的值
+         *
+         * @param value   待处理的值
          * @param persist 是否保存折叠状态
          */
         private void setExpanded(boolean value, boolean persist) {
@@ -825,7 +856,9 @@ public final class DirMavenConfigurable implements Configurable {
             return panel;
         }
 
-        /** 加一行目录输入（带浏览与移除按钮）。首行提示支持的表达式语法。 */
+        /**
+         * 加一行目录输入（带浏览与移除按钮）。首行提示支持的表达式语法。
+         */
         void addDirectoryRow(String path) {
             TextFieldWithBrowseButton field =
                     new TextFieldWithBrowseButton(new JBTextField(path));
@@ -866,7 +899,9 @@ public final class DirMavenConfigurable implements Configurable {
             directoryFields.add(field);
         }
 
-        /** 关掉「启用」后，把整张卡片的输入项置灰，视觉上明确这条规则不会生效。 */
+        /**
+         * 关掉「启用」后，把整张卡片的输入项置灰，视觉上明确这条规则不会生效。
+         */
         void updateEnabledState() {
             boolean on = enabled.isSelected();
             nameField.setEnabled(on);
@@ -882,8 +917,9 @@ public final class DirMavenConfigurable implements Configurable {
 
         /**
          * 递归设置规则表单控件的可用状态。
+         *
          * @param component 待更新的界面组件
-         * @param enabled 是否启用
+         * @param enabled   是否启用
          */
         private static void setEnabledRecursive(java.awt.Component component, boolean enabled) {
             component.setEnabled(enabled);

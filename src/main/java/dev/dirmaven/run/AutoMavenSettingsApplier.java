@@ -16,9 +16,9 @@ import java.util.List;
 
 /**
  * @Author lt_xiaoyi
-     * @Description 在 Maven 导入完成后自动切换匹配的 settings.xml
+ * @Description 在 Maven 导入完成后自动切换匹配的 settings.xml
  * @Version 1.0
- *
+ * <p>
  * Maven 导入完成后的自动切换：项目打开 / git clone 后第一次导入结束时，
  * 按项目根目录解析规则，命中带 settings.xml 的规则且与当前设置不同时，
  * 自动把「User settings file」切过去并触发重新导入。
@@ -33,6 +33,7 @@ public final class AutoMavenSettingsApplier implements MavenImportListener {
 
     /**
      * {@code projectListeners} 注册的监听器由平台注入 Project。
+     *
      * @param project 当前 IDE 项目
      */
     public AutoMavenSettingsApplier(@NotNull Project project) {
@@ -41,8 +42,9 @@ public final class AutoMavenSettingsApplier implements MavenImportListener {
 
     /**
      * 在 Maven 导入结束后按目录规则更新用户配置并重新导入。
+     *
      * @param mavenProjects 本次导入的 Maven 项目
-     * @param modules 本次导入的模块
+     * @param modules       本次导入的模块
      */
     @Override
     public void importFinished(@NotNull Collection<org.jetbrains.idea.maven.project.MavenProject> mavenProjects,
@@ -81,7 +83,8 @@ public final class AutoMavenSettingsApplier implements MavenImportListener {
                 return; // 双重保险：可能已被其它路径切换
             }
             manager.getGeneralSettings().setUserSettingsFile(target);
-            manager.forceUpdateProjects();
+            // 项目已经完成 Maven 导入；使用公开入口执行完整重新导入，避免调用平台内部 API。
+            manager.forceUpdateAllProjectsOrFindAllAvailablePomFiles();
             NotificationGroupManager.getInstance()
                     .getNotificationGroup(NOTIFICATION_GROUP)
                     .createNotification(

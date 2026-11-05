@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
  * @Author lt_xiaoyi
  * @Description 匹配普通目录与 glob 目录表达式
  * @Version 1.0
- *
+ * <p>
  * 纯 Java 的目录匹配工具，不依赖 IntelliJ 平台，方便单测和脱离 IDE 复用。
  *
  * <p>匹配规则：</p>
@@ -27,6 +27,7 @@ public final class DirectoryPattern {
 
     /**
      * 统一成 {@code /} 分隔、去掉结尾斜杠的形式。
+     *
      * @param path 待处理的路径
      * @return 统一格式的目录路径
      */
@@ -43,6 +44,7 @@ public final class DirectoryPattern {
 
     /**
      * 判断目录表达式是否含通配符。
+     *
      * @param pattern 目录匹配表达式
      * @return 存在通配符时为 true
      */
@@ -52,7 +54,8 @@ public final class DirectoryPattern {
 
     /**
      * {@code directory} 是否落在 {@code pattern} 描述的目录（含其子目录）内。
-     * @param pattern 目录匹配表达式
+     *
+     * @param pattern   目录匹配表达式
      * @param directory 待匹配的目标目录
      * @return 目录命中规则时为 true
      */
@@ -85,6 +88,7 @@ public final class DirectoryPattern {
 
     /**
      * 把 glob 编译成正则（结果做了缓存，规则数量很少，缓存也就很小）。
+     *
      * @param glob 目录通配表达式
      * @return 已缓存的目录正则表达式
      */
@@ -98,6 +102,7 @@ public final class DirectoryPattern {
 
     /**
      * 将 glob 中的单层与多层通配符转为目录正则，避免把路径分隔符误匹配成普通字符。
+     *
      * @param glob 目录通配表达式
      * @return 等价的正则表达式
      */
@@ -146,6 +151,7 @@ public final class DirectoryPattern {
 
     /**
      * 判断路径是否使用不区分大小写的匹配规则。
+     *
      * @param path 待处理的路径
      * @return 需要忽略大小写时为 true
      */

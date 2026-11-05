@@ -7,7 +7,7 @@ import java.util.List;
  * @Author lt_xiaoyi
  * @Description 按目录精度合并项目与全局 Maven 规则
  * @Version 1.0
- *
+ * <p>
  * 规则解析：把「一组规则 + 项目根目录 + 目标目录」变成一个可直接使用的 Maven 命令行片段。
  *
  * <p>纯 Java 实现，没有任何 IntelliJ 依赖 —— 便于单测，也方便把同样的规则用在脚本 / CI 里。</p>
@@ -21,9 +21,9 @@ public final class MavenConfigResolver {
     }
 
     /**
-     * @param rules      规则列表，顺序即书写顺序（同精度的规则先出现者胜）
+     * @param rules       规则列表，顺序即书写顺序（同精度的规则先出现者胜）
      * @param projectBase 项目根目录，用于补全相对路径与 {@code ${PROJECT_DIR$}} 占位符
-     * @param directory  目标目录（Maven 运行配置的工作目录）
+     * @param directory   目标目录（Maven 运行配置的工作目录）
      * @return 命中的配置；没有任何规则命中时返回 {@code null}
      */
     public static ResolvedMavenConfig resolve(List<MavenRule> rules, String projectBase, String directory) {
@@ -56,14 +56,17 @@ public final class MavenConfigResolver {
         return globalBest.getMatchScore() > projectBest.getMatchScore() ? globalBest : projectBest;
     }
 
-    /** 兜底规则的得分：低于任何真实匹配，只用来标记「这条是兜底命中的」。 */
+    /**
+     * 兜底规则的得分：低于任何真实匹配，只用来标记「这条是兜底命中的」。
+     */
     public static final int FALLBACK_SCORE = -2;
 
     /**
      * 两层里找默认兜底规则：项目级默认优先于全局默认。
+     *
      * @param projectRules 项目级规则
-     * @param globalRules 全局规则
-     * @param projectBase 项目根目录
+     * @param globalRules  全局规则
+     * @param projectBase  项目根目录
      * @return 优先命中的兜底配置；不存在时为 null
      */
     private static ResolvedMavenConfig fallbackOf(List<MavenRule> projectRules, List<MavenRule> globalRules,
@@ -74,9 +77,10 @@ public final class MavenConfigResolver {
 
     /**
      * 找第一条启用且带注入内容的默认兜底规则（不要求填目录）。
-     * @param rules 待保存或解析的规则列表
+     *
+     * @param rules        待保存或解析的规则列表
      * @param globalSource 规则是否来自全局配置
-     * @param projectBase 项目根目录
+     * @param projectBase  项目根目录
      * @return 首条有效兜底配置；不存在时为 null
      */
     private static ResolvedMavenConfig findFallback(List<MavenRule> rules, boolean globalSource, String projectBase) {
@@ -95,10 +99,11 @@ public final class MavenConfigResolver {
 
     /**
      * 在一层规则里找最精确的命中；返回值自带得分。
-     * @param rules 待保存或解析的规则列表
+     *
+     * @param rules        待保存或解析的规则列表
      * @param globalSource 规则是否来自全局配置
-     * @param projectBase 项目根目录
-     * @param dir 已规范化的目标目录
+     * @param projectBase  项目根目录
+     * @param dir          已规范化的目标目录
      * @return 当前层最精确的匹配；未命中时为 null
      */
     private static ResolvedMavenConfig matchLayer(List<MavenRule> rules, boolean globalSource,
@@ -142,9 +147,10 @@ public final class MavenConfigResolver {
 
     /**
      * 根据项目规则生成解析结果。
-     * @param rule 命中的原始规则
-     * @param index 规则在列表中的下标
-     * @param projectBase 项目根目录
+     *
+     * @param rule           命中的原始规则
+     * @param index          规则在列表中的下标
+     * @param projectBase    项目根目录
      * @param matchedPattern 实际命中的目录表达式
      * @return 可用于注入的 Maven 配置
      */
@@ -154,12 +160,13 @@ public final class MavenConfigResolver {
 
     /**
      * 根据指定来源生成解析结果。
-     * @param rule 命中的原始规则
-     * @param index 规则在列表中的下标
-     * @param projectBase 项目根目录
+     *
+     * @param rule           命中的原始规则
+     * @param index          规则在列表中的下标
+     * @param projectBase    项目根目录
      * @param matchedPattern 实际命中的目录表达式
-     * @param globalSource 是否来自全局规则
-     * @param matchScore 目录匹配精度
+     * @param globalSource   是否来自全局规则
+     * @param matchScore     目录匹配精度
      * @return 可用于注入的 Maven 配置
      */
     static ResolvedMavenConfig build(MavenRule rule, int index, String projectBase, String matchedPattern,
@@ -169,13 +176,14 @@ public final class MavenConfigResolver {
 
     /**
      * 展开路径、参数与环境变量，生成完整的注入配置。
-     * @param rule 命中的原始规则
-     * @param index 规则在列表中的下标
-     * @param projectBase 项目根目录
+     *
+     * @param rule           命中的原始规则
+     * @param index          规则在列表中的下标
+     * @param projectBase    项目根目录
      * @param matchedPattern 实际命中的目录表达式
-     * @param globalSource 是否来自全局规则
-     * @param matchScore 目录匹配精度
-     * @param fallbackHit 是否由兜底规则命中
+     * @param globalSource   是否来自全局规则
+     * @param matchScore     目录匹配精度
+     * @param fallbackHit    是否由兜底规则命中
      * @return 完整的 Maven 注入配置
      */
     static ResolvedMavenConfig build(MavenRule rule, int index, String projectBase, String matchedPattern,
@@ -275,7 +283,8 @@ public final class MavenConfigResolver {
 
     /**
      * 展开路径类占位符；相对路径按项目根目录补全。
-     * @param value 待处理的值
+     *
+     * @param value       待处理的值
      * @param projectBase 项目根目录
      * @return 展开后的绝对路径
      */
@@ -295,7 +304,8 @@ public final class MavenConfigResolver {
 
     /**
      * 展开 {@code ${PROJECT_DIR$}}、{@code ~}、{@code ${HOME}} 等占位符（不做绝对化）。
-     * @param value 待处理的值
+     *
+     * @param value       待处理的值
      * @param projectBase 项目根目录
      * @return 已展开占位符的文本
      */
@@ -329,6 +339,7 @@ public final class MavenConfigResolver {
 
     /**
      * 去掉 profile 配置中的命令行前缀，避免重复生成 {@code -P}。
+     *
      * @param profiles 用户输入的 profile 文本
      * @return 仅包含 profile 名称的文本
      */
@@ -348,6 +359,7 @@ public final class MavenConfigResolver {
 
     /**
      * 判断路径是否为绝对路径。
+     *
      * @param path 待处理的路径
      * @return 绝对路径时为 true
      */
@@ -359,6 +371,7 @@ public final class MavenConfigResolver {
 
     /**
      * 判断配置文本是否为空白。
+     *
      * @param value 待处理的值
      * @return 文本为空白时为 true
      */

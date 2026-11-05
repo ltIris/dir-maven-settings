@@ -7,7 +7,7 @@ import java.util.List;
  * @Author lt_xiaoyi
  * @Description 覆盖目录规则解析行为的本地自检场景
  * @Version 1.0
- *
+ * <p>
  * 不依赖 IntelliJ / JUnit 的自检脚本，用来在纯 JDK 环境下验证匹配与解析逻辑。
  * <pre>javac -d out src/main/java/dev/dirmaven/core/*.java src/test/java/dev/dirmaven/core/MatcherSelfCheck.java
  * java -cp out dev.dirmaven.core.MatcherSelfCheck</pre>
@@ -18,6 +18,7 @@ public final class MatcherSelfCheck {
 
     /**
      * 依次运行目录匹配的自检场景。
+     *
      * @param args 命令行参数
      */
     public static void main(String[] args) {
@@ -378,7 +379,8 @@ public final class MatcherSelfCheck {
 
     /**
      * 记录断言结果并统计失败数量。
-     * @param name 规则的显示名称
+     *
+     * @param name      规则的显示名称
      * @param condition 待验证的断言结果
      */
     private static void check(String name, boolean condition) {

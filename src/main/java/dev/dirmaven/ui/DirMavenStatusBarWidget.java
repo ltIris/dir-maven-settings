@@ -21,7 +21,7 @@ import java.io.File;
  * @Author lt_xiaoyi
  * @Description 展示当前目录命中的 Maven 规则
  * @Version 1.0
- *
+ * <p>
  * 状态栏上的小提示：当前编辑器所在目录命中哪条规则。
  */
 public final class DirMavenStatusBarWidget implements StatusBarWidget, StatusBarWidget.TextPresentation, Disposable {
@@ -31,6 +31,7 @@ public final class DirMavenStatusBarWidget implements StatusBarWidget, StatusBar
 
     /**
      * 初始化 DirMavenStatusBarWidget。
+     *
      * @param project 当前 IDE 项目
      */
     public DirMavenStatusBarWidget(Project project) {
@@ -39,6 +40,7 @@ public final class DirMavenStatusBarWidget implements StatusBarWidget, StatusBar
 
     /**
      * 返回状态栏组件标识。
+     *
      * @return 组件唯一标识
      */
     @Override
@@ -48,6 +50,7 @@ public final class DirMavenStatusBarWidget implements StatusBarWidget, StatusBar
 
     /**
      * 返回状态栏组件的文本展示对象。
+     *
      * @return 状态栏展示对象
      */
     @Override
@@ -57,6 +60,7 @@ public final class DirMavenStatusBarWidget implements StatusBarWidget, StatusBar
 
     /**
      * 订阅编辑器切换事件以刷新状态栏。
+     *
      * @param statusBar 目标 IDE 状态栏
      */
     @Override
@@ -77,6 +81,7 @@ public final class DirMavenStatusBarWidget implements StatusBarWidget, StatusBar
 
     /**
      * 生成当前目录命中规则的简短文本。
+     *
      * @return 当前命中规则的简短名称
      */
     @Override
@@ -99,6 +104,7 @@ public final class DirMavenStatusBarWidget implements StatusBarWidget, StatusBar
 
     /**
      * 返回状态栏文本的对齐方式。
+     *
      * @return 文本对齐系数
      */
     @Override
@@ -108,6 +114,7 @@ public final class DirMavenStatusBarWidget implements StatusBarWidget, StatusBar
 
     /**
      * 生成当前配置的详细悬浮提示。
+     *
      * @return 当前配置的详细提示
      */
     @Override
@@ -127,6 +134,7 @@ public final class DirMavenStatusBarWidget implements StatusBarWidget, StatusBar
 
     /**
      * 提供状态栏点击操作。
+     *
      * @return 点击状态栏时执行的操作
      */
     @Override
@@ -145,6 +153,7 @@ public final class DirMavenStatusBarWidget implements StatusBarWidget, StatusBar
 
     /**
      * 获取当前文件或项目对应的目录。
+     *
      * @return 当前文件所在目录；不可用时为项目根目录
      */
     private @Nullable String currentDirectory() {
@@ -162,6 +171,7 @@ public final class DirMavenStatusBarWidget implements StatusBarWidget, StatusBar
 
     /**
      * 转义状态栏提示中的 HTML 特殊字符。
+     *
      * @param text 待解析或展示的文本
      * @return 可安全写入 HTML 提示文本的字符串
      */

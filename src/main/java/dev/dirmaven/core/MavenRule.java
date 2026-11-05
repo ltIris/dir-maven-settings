@@ -4,7 +4,7 @@ package dev.dirmaven.core;
  * @Author lt_xiaoyi
  * @Description 保存一条目录与 Maven 配置的映射规则
  * @Version 1.0
- *
+ * <p>
  * 一条「目录 → Maven 配置」规则。
  *
  * <p>字段之所以保持 public 且类不可变，是为了让 IntelliJ 的 {@code XmlSerializer}
@@ -13,7 +13,9 @@ package dev.dirmaven.core;
  */
 public final class MavenRule {
 
-    /** 规则的显示名称，例如「公司内网」「客户现场」。留空时 UI 会回退显示为「规则 N」。 */
+    /**
+     * 规则的显示名称，例如「公司内网」「客户现场」。留空时 UI 会回退显示为「规则 N」。
+     */
     public String name = "";
 
     /**
@@ -22,13 +24,19 @@ public final class MavenRule {
      */
     public String directory = "";
 
-    /** settings.xml 的路径。可以留空：此时只注入 profile / 额外参数。 */
+    /**
+     * settings.xml 的路径。可以留空：此时只注入 profile / 额外参数。
+     */
     public String settingsFile = "";
 
-    /** 要激活的 profile，逗号分隔，例如 {@code dev} 或 {@code dev,!prod}。 */
+    /**
+     * 要激活的 profile，逗号分隔，例如 {@code dev} 或 {@code dev,!prod}。
+     */
     public String profiles = "";
 
-    /** 追加到 mvn 命令行的其它参数，例如 {@code -Dmaven.repo.local=/data/repo -U}。 */
+    /**
+     * 追加到 mvn 命令行的其它参数，例如 {@code -Dmaven.repo.local=/data/repo -U}。
+     */
     public String extraArgs = "";
 
     /**
@@ -36,7 +44,9 @@ public final class MavenRule {
      */
     public String envVars = "";
 
-    /** 这条规则是否启用。 */
+    /**
+     * 这条规则是否启用。
+     */
     public boolean enabled = true;
 
     /**
@@ -59,11 +69,12 @@ public final class MavenRule {
 
     /**
      * 初始化 MavenRule。
-     * @param directory 待匹配的目标目录
+     *
+     * @param directory    待匹配的目标目录
      * @param settingsFile Maven settings.xml 文件路径
-     * @param profiles 需要激活的 Maven profile
-     * @param extraArgs 额外 Maven 命令行参数
-     * @param enabled 是否启用
+     * @param profiles     需要激活的 Maven profile
+     * @param extraArgs    额外 Maven 命令行参数
+     * @param enabled      是否启用
      */
     public MavenRule(String directory, String settingsFile, String profiles, String extraArgs, boolean enabled) {
         this("", directory, settingsFile, profiles, extraArgs, enabled);
@@ -71,12 +82,13 @@ public final class MavenRule {
 
     /**
      * 初始化 MavenRule。
-     * @param name 规则的显示名称
-     * @param directory 待匹配的目标目录
+     *
+     * @param name         规则的显示名称
+     * @param directory    待匹配的目标目录
      * @param settingsFile Maven settings.xml 文件路径
-     * @param profiles 需要激活的 Maven profile
-     * @param extraArgs 额外 Maven 命令行参数
-     * @param enabled 是否启用
+     * @param profiles     需要激活的 Maven profile
+     * @param extraArgs    额外 Maven 命令行参数
+     * @param enabled      是否启用
      */
     public MavenRule(String name, String directory, String settingsFile, String profiles, String extraArgs, boolean enabled) {
         this(name, directory, settingsFile, profiles, extraArgs, "", enabled);
@@ -84,13 +96,14 @@ public final class MavenRule {
 
     /**
      * 初始化 MavenRule。
-     * @param name 规则的显示名称
-     * @param directory 待匹配的目标目录
+     *
+     * @param name         规则的显示名称
+     * @param directory    待匹配的目标目录
      * @param settingsFile Maven settings.xml 文件路径
-     * @param profiles 需要激活的 Maven profile
-     * @param extraArgs 额外 Maven 命令行参数
-     * @param envVars 环境变量配置
-     * @param enabled 是否启用
+     * @param profiles     需要激活的 Maven profile
+     * @param extraArgs    额外 Maven 命令行参数
+     * @param envVars      环境变量配置
+     * @param enabled      是否启用
      */
     public MavenRule(String name, String directory, String settingsFile, String profiles, String extraArgs,
                      String envVars, boolean enabled) {
@@ -105,6 +118,7 @@ public final class MavenRule {
 
     /**
      * 复制规则以隔离编辑状态。
+     *
      * @return 与原规则独立的副本
      */
     public MavenRule copy() {
@@ -141,6 +155,7 @@ public final class MavenRule {
 
     /**
      * 规则里是否有真正需要注入的内容。
+     *
      * @return 规则包含有效注入内容时为 true
      */
     public boolean hasPayload() {
@@ -149,6 +164,7 @@ public final class MavenRule {
 
     /**
      * 判断配置文本是否为空白。
+     *
      * @param value 待处理的值
      * @return 文本为空白时为 true
      */
@@ -158,6 +174,7 @@ public final class MavenRule {
 
     /**
      * 比较两条规则的配置内容。
+     *
      * @param o 待比较的对象
      * @return 内容相同时为 true
      */
@@ -179,6 +196,7 @@ public final class MavenRule {
 
     /**
      * 计算规则内容的哈希值。
+     *
      * @return 与规则内容一致的哈希值
      */
     @Override
@@ -197,6 +215,7 @@ public final class MavenRule {
 
     /**
      * 生成规则的调试描述。
+     *
      * @return 规则的文本描述
      */
     @Override
@@ -208,6 +227,7 @@ public final class MavenRule {
 
     /**
      * 将空值转换为可比较的字符串。
+     *
      * @param value 待处理的值
      * @return 非 null 的规则字段值
      */

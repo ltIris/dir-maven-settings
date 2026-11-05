@@ -2,7 +2,7 @@
     <id>dev.dirmaven.settings</id>
     <name>Directory Maven Settings</name>
     <vendor>dev.dirmaven</vendor>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
 
     <description><![CDATA[
     <p>Directory Maven Settings selects Maven settings.xml by directory and applies matching profiles, arguments, and environment variables.</p>
@@ -19,6 +19,10 @@
     ]]></description>
 
     <change-notes><![CDATA[
+    <h3>1.1.2</h3>
+    <ul>
+      <li>改用公开的 Maven 重新导入入口，移除两处内部 API 调用</li>
+    </ul>
     <h3>1.1.1</h3>
     <ul>
       <li>调整插件描述的英文开头，使分发包符合 JetBrains Marketplace 的描述校验要求</li>
